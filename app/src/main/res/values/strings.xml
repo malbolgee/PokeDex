@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PokeDex</string>
+
+    <string name="search_bar_hint">Search</string>
+    <string name="main_logo_description">Pokemon Logo</string>
+
+    <string name="detail_base_stats">Base stats:</string>
+
+</resources>
