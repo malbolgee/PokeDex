@@ -15,5 +15,4 @@ data class PokeDexListEntry(
             it.contains(query, ignoreCase = true)
         }
     }
-
 }

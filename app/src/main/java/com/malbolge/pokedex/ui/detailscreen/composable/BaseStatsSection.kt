@@ -41,5 +41,4 @@ fun BaseStatsSection(modifier: Modifier = Modifier, pokemonInfo: Pokemon) {
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
-
 }

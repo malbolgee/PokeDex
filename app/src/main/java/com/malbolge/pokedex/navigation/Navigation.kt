@@ -35,9 +35,11 @@ fun Navigation(
                     ).also {
                         mainScreenViewModel.eraseSearchText()
                     }
-                })
+                }
+            )
         }
-        composable("${Screen.PokemonDetailScreen.route}/{pokemon_name}",
+        composable(
+            "${Screen.PokemonDetailScreen.route}/{pokemon_name}",
             arguments = listOf(
                 navArgument("pokemon_name") {
                     type = NavType.StringType

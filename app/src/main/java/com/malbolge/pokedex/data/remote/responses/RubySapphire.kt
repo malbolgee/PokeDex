@@ -1,6 +1,5 @@
 package com.malbolge.pokedex.data.remote.responses
 
-
 import com.google.gson.annotations.SerializedName
 
 data class RubySapphire(

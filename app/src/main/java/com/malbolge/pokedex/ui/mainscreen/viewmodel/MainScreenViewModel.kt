@@ -6,10 +6,10 @@ import com.malbolge.pokedex.data.models.PokeDexListEntry
 import com.malbolge.pokedex.repository.PokemonRepository
 import com.malbolge.pokedex.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(private val repository: PokemonRepository) :
@@ -30,7 +30,6 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
     init {
         loadPokemon()
     }
-
 
     @OptIn(FlowPreview::class)
     val entries = searchText
@@ -64,7 +63,8 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
                         }
 
                         val url =
-                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png"
+                            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/" +
+                                "pokemon/$number.png"
 
                         PokeDexListEntry(
                             entry.name.replaceFirstChar { it.uppercaseChar() },
@@ -76,7 +76,6 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
                     pokeDexListEntries?.let {
                         _entries.value = it
                     }
-
                 }
                 else -> {}
             }
@@ -90,5 +89,4 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
     fun eraseSearchText() {
         _searchText.value = ""
     }
-
 }

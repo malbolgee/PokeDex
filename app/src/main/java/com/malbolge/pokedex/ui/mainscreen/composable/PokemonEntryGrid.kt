@@ -28,7 +28,6 @@ fun PokemonEntryGrid(
                 onNavigateToDetails = onNavigateToDetails,
             )
         }
-
     }
 }
 
@@ -43,7 +42,8 @@ private fun Preview() {
 private fun getPokeDexEntryList() = List(30) { i ->
     PokeDexListEntry(
         pokemonName = "Pokemon $i",
-        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i}.png",
+        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/" +
+            "pokemon/$i.png",
         number = i
     )
 }

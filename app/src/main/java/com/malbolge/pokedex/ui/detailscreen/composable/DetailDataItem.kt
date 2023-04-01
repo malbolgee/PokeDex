@@ -34,7 +34,6 @@ fun DetailDataItem(
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "$value$unit", color = MaterialTheme.colors.onSurface)
     }
-
 }
 
 @Preview(showBackground = true)
@@ -46,7 +45,5 @@ private fun Preview() {
             unit = "kg",
             icon = painterResource(id = R.drawable.baseline_balance_24)
         )
-
     }
-
 }

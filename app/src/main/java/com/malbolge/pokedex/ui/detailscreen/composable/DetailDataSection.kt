@@ -51,5 +51,4 @@ private fun Preview() {
     PokeDexTheme() {
         DetailDataSection(weight = 65, height = 65)
     }
-
 }

@@ -28,11 +28,11 @@ fun DetailSection(modifier: Modifier = Modifier, pokemonInfo: Pokemon) {
     ) {
         Text(
             text = "#${pokemonInfo.id} ${
-                pokemonInfo.name.replaceFirstChar {
-                    it.titlecase(
-                        Locale.ROOT
-                    )
-                }
+            pokemonInfo.name.replaceFirstChar {
+                it.titlecase(
+                    Locale.ROOT
+                )
+            }
             }",
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
@@ -46,5 +46,4 @@ fun DetailSection(modifier: Modifier = Modifier, pokemonInfo: Pokemon) {
         )
         BaseStatsSection(modifier = modifier, pokemonInfo = pokemonInfo)
     }
-
 }

@@ -70,7 +70,6 @@ fun DetailStats(
             )
         }
     }
-
 }
 
 @Preview(showBackground = true)

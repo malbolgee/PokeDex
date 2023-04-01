@@ -33,7 +33,6 @@ fun TopSection(modifier: Modifier = Modifier, onBackNavigation: () -> Unit = {})
                 }
         )
     }
-
 }
 
 @Preview(showBackground = true)

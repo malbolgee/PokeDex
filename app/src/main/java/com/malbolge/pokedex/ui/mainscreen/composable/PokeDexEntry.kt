@@ -62,7 +62,8 @@ fun PokeDexEntry(
                             .scale(0.5f),
                         color = MaterialTheme.colors.primary
                     )
-                })
+                }
+            )
 
             Text(
                 text = entry.pokemonName,
@@ -72,9 +73,7 @@ fun PokeDexEntry(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-
     }
-
 }
 
 @Preview(showBackground = true)
@@ -88,6 +87,5 @@ private fun Preview() {
                 number = 1
             ),
         )
-
     }
 }

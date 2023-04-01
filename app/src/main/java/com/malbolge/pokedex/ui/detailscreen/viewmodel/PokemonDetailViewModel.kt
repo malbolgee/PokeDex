@@ -14,5 +14,4 @@ class PokemonDetailViewModel @Inject constructor(private val repository: Pokemon
     suspend fun getPokemonInfo(pokemonName: String): Resource<Pokemon> {
         return repository.getPokemonInfo(pokemonName)
     }
-
 }

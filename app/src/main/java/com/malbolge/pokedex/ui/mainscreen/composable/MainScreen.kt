@@ -68,7 +68,6 @@ fun MainScreen(
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
@@ -77,5 +76,4 @@ private fun Preview() {
     PokeDexTheme {
         MainScreen(viewModel = viewModel())
     }
-
 }

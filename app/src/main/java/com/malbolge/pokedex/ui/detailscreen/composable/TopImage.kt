@@ -50,7 +50,6 @@ fun TopImage(pokemonInfo: Resource<Pokemon> = Resource.Loading()) {
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
