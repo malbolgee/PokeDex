@@ -1,6 +1,8 @@
 package com.malbolge.pokedex.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,10 +29,10 @@ fun Navigation(
         composable(Screen.MainScreen.route) {
             MainScreen(
                 viewModel = mainScreenViewModel,
-                onNavigateToDetails = {
+                onNavigateToDetails = { name, color ->
                     navController.navigate(
                         Screen.PokemonDetailScreen.withArgs(
-                            it
+                            name, color.toString()
                         )
                     ).also {
                         mainScreenViewModel.eraseSearchText()
@@ -39,16 +41,28 @@ fun Navigation(
             )
         }
         composable(
-            "${Screen.PokemonDetailScreen.route}/{pokemon_name}",
+            route = "${Screen.PokemonDetailScreen.route}/{pokemonName}/{dominantColor}",
             arguments = listOf(
-                navArgument("pokemon_name") {
+                navArgument("pokemonName") {
                     type = NavType.StringType
+                },
+                navArgument("dominantColor") {
+                    type = NavType.IntType
                 }
             )
         ) {
-            val pokemonName = it.arguments?.getString("pokemon_name") ?: ""
+            val pokemonName = remember {
+                it.arguments?.getString("pokemonName") ?: "Pikachu"
+            }
+
+            val dominantColor = remember {
+                it.arguments?.getInt("dominantColor")?.let { argument -> Color(argument) }
+                    ?: Color.White
+            }
+
             PokemonDetailScreen(
                 pokemonName = pokemonName,
+                dominantColor = dominantColor,
                 viewModel = pokemonDetailViewModel,
                 onBackNavigation = { navController.popBackStack() },
             )

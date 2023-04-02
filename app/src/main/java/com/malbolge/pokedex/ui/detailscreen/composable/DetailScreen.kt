@@ -1,14 +1,16 @@
 package com.malbolge.pokedex.ui.detailscreen.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.malbolge.pokedex.data.remote.responses.Pokemon
 import com.malbolge.pokedex.ui.detailscreen.viewmodel.PokemonDetailViewModel
@@ -20,6 +22,7 @@ import java.util.*
 fun PokemonDetailScreen(
     modifier: Modifier = Modifier,
     pokemonName: String,
+    dominantColor: Color,
     viewModel: PokemonDetailViewModel,
     onBackNavigation: () -> Unit = {}
 ) {
@@ -31,7 +34,14 @@ fun PokemonDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 16.dp)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        MaterialTheme.colors.surface,
+                        dominantColor
+                    )
+                )
+            )
     ) {
         TopSection(
             modifier = Modifier
@@ -55,6 +65,7 @@ private fun Preview() {
     PokeDexTheme {
         PokemonDetailScreen(
             pokemonName = "Pikachu",
+            dominantColor = Color.White,
             viewModel = viewModel()
         )
     }

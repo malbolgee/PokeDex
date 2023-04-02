@@ -1,5 +1,7 @@
 package com.malbolge.pokedex.ui.mainscreen.composable
 
+import android.graphics.drawable.Drawable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -7,11 +9,13 @@ import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
@@ -28,21 +32,37 @@ import com.malbolge.pokedex.ui.theme.PokeDexTheme
 fun PokeDexEntry(
     modifier: Modifier = Modifier,
     entry: PokeDexListEntry,
-    onNavigateToDetails: (String) -> Unit = {}
+    onDominantColor: (Drawable, (Color) -> Unit) -> Unit = { _, _ -> },
+    onNavigateToDetails: (String, Int) -> Unit = { _, _ -> }
 ) {
+
+    val defaultDominantColor = MaterialTheme.colors.surface
+    var dominantColor by remember {
+        mutableStateOf(defaultDominantColor)
+    }
 
     Card(
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
             .padding(horizontal = 8.dp, vertical = 8.dp)
             .aspectRatio(1f)
             .clickable {
-                onNavigateToDetails(entry.pokemonName)
+                onNavigateToDetails(entry.pokemonName, dominantColor.toArgb())
             },
+        shape = RoundedCornerShape(16.dp),
         elevation = 4.dp
     ) {
 
         Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            defaultDominantColor,
+                            dominantColor
+                        )
+                    )
+                ),
             horizontalAlignment = CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -52,6 +72,11 @@ fun PokeDexEntry(
                     .align(CenterHorizontally),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(entry.imageUrl)
+                    .listener(onSuccess = { _, successResult ->
+                        onDominantColor(successResult.drawable) { color ->
+                            dominantColor = color
+                        }
+                    })
                     .crossfade(true)
                     .build(),
                 contentScale = ContentScale.Fit,

@@ -1,5 +1,6 @@
 package com.malbolge.pokedex.ui.detailscreen.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,16 +20,24 @@ fun TopSection(modifier: Modifier = Modifier, onBackNavigation: () -> Unit = {})
     Box(
         contentAlignment = Alignment.TopStart,
         modifier = modifier
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.Black,
+                        Color.Transparent
+                    )
+                )
+            )
             .fillMaxWidth()
             .fillMaxHeight(0.2f)
     ) {
         Icon(
             Icons.Default.ArrowBack,
             contentDescription = null,
-            tint = Color.Black,
+            tint = Color.White,
             modifier = Modifier
                 .size(36.dp)
-                .offset(15.dp, 16.dp)
+                .offset(16.dp, 16.dp)
                 .clickable {
                     onBackNavigation()
                 }

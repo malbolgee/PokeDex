@@ -1,7 +1,12 @@
 package com.malbolge.pokedex.ui.mainscreen.viewmodel
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
 import com.malbolge.pokedex.data.models.PokeDexListEntry
 import com.malbolge.pokedex.repository.PokemonRepository
 import com.malbolge.pokedex.utils.Resource
@@ -88,5 +93,13 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
 
     fun eraseSearchText() {
         _searchText.value = ""
+    }
+
+    fun calculateDominantColor(drawable: Drawable, onFinish: (Color) -> Unit = {}) {
+        val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        Palette.from(bmp).generate { pallet ->
+            pallet?.dominantSwatch?.rgb?.let { color -> onFinish(Color(color)) }
+        }
     }
 }

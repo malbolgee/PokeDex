@@ -23,7 +23,7 @@ import com.malbolge.pokedex.ui.theme.PokeDexTheme
 fun MainScreen(
     modifier: Modifier = Modifier,
     viewModel: MainScreenViewModel,
-    onNavigateToDetails: (String) -> Unit = {}
+    onNavigateToDetails: (String, Int) -> Unit = { _, _ -> }
 ) {
 
     Surface(
@@ -63,6 +63,7 @@ fun MainScreen(
             } else {
                 PokemonEntryGrid(
                     pokeDexList = viewModel.entries.collectAsState().value,
+                    onDominantColor = viewModel::calculateDominantColor,
                     onNavigateToDetails = onNavigateToDetails
                 )
             }
