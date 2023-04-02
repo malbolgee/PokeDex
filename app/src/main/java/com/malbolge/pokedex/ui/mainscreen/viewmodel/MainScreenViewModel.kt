@@ -9,52 +9,34 @@ import androidx.lifecycle.viewModelScope
 import androidx.palette.graphics.Palette
 import com.malbolge.pokedex.data.models.PokeDexListEntry
 import com.malbolge.pokedex.repository.PokemonRepository
+import com.malbolge.pokedex.ui.mainscreen.state.MainScreenUiState
 import com.malbolge.pokedex.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(private val repository: PokemonRepository) :
     ViewModel() {
 
-    private val _searchText = MutableStateFlow("")
+    private val _mainScreenUiState = MutableStateFlow(
+        MainScreenUiState(
+            onSearchTextChange = this::onSearchTextChange,
+            onEraseSearchText = this::onEraseSearchText,
+            onCalculateDominantColor = this::onCalculateDominantColor
+        )
+    )
 
-    val searchText
-        get() = _searchText.asStateFlow()
-
-    private val _isSearching = MutableStateFlow(false)
-
-    val isSearching
-        get() = _isSearching.asStateFlow()
+    val uiState = _mainScreenUiState.asStateFlow()
 
     private val _entries = MutableStateFlow(listOf<PokeDexListEntry>())
 
     init {
         loadPokemon()
     }
-
-    @OptIn(FlowPreview::class)
-    val entries = searchText
-        .debounce(500L)
-        .onEach { _isSearching.update { true } }
-        .combine(_entries) { text, entries ->
-            if (text.isBlank()) {
-                entries
-            } else {
-                entries.filter {
-                    it.doesMatchSearchQuery(text)
-                }
-            }
-        }
-        .onEach { _isSearching.update { false } }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            _entries.value
-        )
 
     private fun loadPokemon() {
         viewModelScope.launch {
@@ -80,6 +62,7 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
 
                     pokeDexListEntries?.let {
                         _entries.value = it
+                        _mainScreenUiState.update { state -> state.copy(entries = _entries.value) }
                     }
                 }
                 else -> {}
@@ -87,15 +70,32 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
         }
     }
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
+    private fun onSearchTextChange(text: String) {
+        viewModelScope.launch {
+            _mainScreenUiState.update { state ->
+                state.copy(
+                    searchText = text,
+                    entries = if (text.isBlank()) _entries.value else _entries.value
+                        .filter { entry ->
+                            entry.doesMatchSearchQuery(text)
+                        }
+                )
+            }
+        }
     }
 
-    fun eraseSearchText() {
-        _searchText.value = ""
+    private fun onEraseSearchText() {
+        viewModelScope.launch {
+            _mainScreenUiState.update { state ->
+                state.copy(
+                    searchText = "",
+                    entries = _entries.value
+                )
+            }
+        }
     }
 
-    fun calculateDominantColor(drawable: Drawable, onFinish: (Color) -> Unit = {}) {
+    private fun onCalculateDominantColor(drawable: Drawable, onFinish: (Color) -> Unit = {}) {
         val bmp = (drawable as BitmapDrawable).bitmap.copy(Bitmap.Config.ARGB_8888, true)
 
         Palette.from(bmp).generate { pallet ->

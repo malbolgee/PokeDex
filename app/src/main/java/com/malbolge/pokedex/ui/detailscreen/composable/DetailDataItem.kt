@@ -39,7 +39,7 @@ fun DetailDataItem(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    PokeDexTheme() {
+    PokeDexTheme {
         DetailDataItem(
             value = 10.0f,
             unit = "kg",

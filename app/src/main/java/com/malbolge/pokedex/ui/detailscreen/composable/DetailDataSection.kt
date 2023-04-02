@@ -48,7 +48,7 @@ fun DetailDataSection(weight: Int, height: Int) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    PokeDexTheme() {
+    PokeDexTheme {
         DetailDataSection(weight = 65, height = 65)
     }
 }

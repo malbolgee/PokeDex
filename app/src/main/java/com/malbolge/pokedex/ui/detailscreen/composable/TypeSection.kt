@@ -50,7 +50,7 @@ fun TypeSection(types: List<Type>) {
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    PokeDexTheme() {
+    PokeDexTheme {
         TypeSection(
             types = listOf(
                 Type(type = TypeX(name = "grass")),

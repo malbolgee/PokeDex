@@ -1,6 +1,8 @@
 package com.malbolge.pokedex.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavType
@@ -27,15 +29,16 @@ fun Navigation(
     ) {
 
         composable(Screen.MainScreen.route) {
+            val uiState by mainScreenViewModel.uiState.collectAsState()
             MainScreen(
-                viewModel = mainScreenViewModel,
+                uiState = uiState,
                 onNavigateToDetails = { name, color ->
                     navController.navigate(
                         Screen.PokemonDetailScreen.withArgs(
                             name, color.toString()
                         )
                     ).also {
-                        mainScreenViewModel.eraseSearchText()
+                        uiState.onEraseSearchText()
                     }
                 }
             )

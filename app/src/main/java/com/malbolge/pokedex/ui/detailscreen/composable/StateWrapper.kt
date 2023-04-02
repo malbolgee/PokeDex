@@ -57,7 +57,7 @@ fun StateWrapper(
 @Preview
 @Composable
 private fun Preview() {
-    PokeDexTheme() {
+    PokeDexTheme {
         StateWrapper()
     }
 }

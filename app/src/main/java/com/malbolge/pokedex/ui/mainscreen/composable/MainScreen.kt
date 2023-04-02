@@ -2,11 +2,9 @@ package com.malbolge.pokedex.ui.mainscreen.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -14,15 +12,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.malbolge.pokedex.R
-import com.malbolge.pokedex.ui.mainscreen.viewmodel.MainScreenViewModel
+import com.malbolge.pokedex.ui.mainscreen.state.MainScreenUiState
 import com.malbolge.pokedex.ui.theme.PokeDexTheme
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainScreenViewModel,
+    uiState: MainScreenUiState = MainScreenUiState(),
     onNavigateToDetails: (String, Int) -> Unit = { _, _ -> }
 ) {
 
@@ -43,27 +40,31 @@ fun MainScreen(
             )
             Spacer(modifier = Modifier.height(20.dp))
             SearchBar(
-                text = viewModel.searchText.collectAsState().value,
+                text = uiState.searchText,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 hint = R.string.search_bar_hint,
                 onSearch = {
-                    viewModel.onSearchTextChange(it)
+                    uiState.onSearchTextChange(it)
                 }
             )
             Spacer(modifier = Modifier.height(20.dp))
-            if (viewModel.isSearching.collectAsState().value) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Center)
-                    )
-                }
+
+            if (uiState.entries.isEmpty()) {
+                Image(
+                    modifier = Modifier
+                        .offset(y = 120.dp)
+                        .align(CenterHorizontally)
+                        .size(240.dp),
+                    alignment = Center,
+                    painter = painterResource(id = R.drawable.pikachu),
+                    contentDescription = null
+                )
             } else {
                 PokemonEntryGrid(
-                    pokeDexList = viewModel.entries.collectAsState().value,
-                    onDominantColor = viewModel::calculateDominantColor,
+                    pokeDexList = uiState.entries,
+                    onDominantColor = uiState.onCalculateDominantColor,
                     onNavigateToDetails = onNavigateToDetails
                 )
             }
@@ -75,6 +76,6 @@ fun MainScreen(
 @Composable
 private fun Preview() {
     PokeDexTheme {
-        MainScreen(viewModel = viewModel())
+        MainScreen()
     }
 }
