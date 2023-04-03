@@ -29,6 +29,11 @@ fun PokemonImage(
 ) {
 
     if (entry == null) {
+        LocalContext.current.getDrawable(R.drawable.pikachu)?.let { drawable ->
+            onDominantColor(drawable) { color ->
+                setDominantColor(color)
+            }
+        }
         Image(
             modifier = modifier
                 .size(120.dp),

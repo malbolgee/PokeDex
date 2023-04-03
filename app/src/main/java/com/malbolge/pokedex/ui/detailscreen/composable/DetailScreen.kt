@@ -11,9 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.malbolge.pokedex.data.remote.responses.Pokemon
-import com.malbolge.pokedex.ui.detailscreen.viewmodel.PokemonDetailViewModel
+import com.malbolge.pokedex.ui.detailscreen.state.PokemonDetailScreenUiState
 import com.malbolge.pokedex.ui.theme.PokeDexTheme
 import com.malbolge.pokedex.utils.Resource
 import java.util.*
@@ -21,14 +20,16 @@ import java.util.*
 @Composable
 fun PokemonDetailScreen(
     modifier: Modifier = Modifier,
+    uiState: PokemonDetailScreenUiState = PokemonDetailScreenUiState(),
     pokemonName: String,
     dominantColor: Color,
-    viewModel: PokemonDetailViewModel,
     onBackNavigation: () -> Unit = {}
 ) {
 
     val pokemonInfo = produceState<Resource<Pokemon>>(initialValue = Resource.Loading()) {
-        value = viewModel.getPokemonInfo(pokemonName.lowercase(Locale.ROOT))
+        uiState.onGetPokemonInfo(pokemonName.lowercase(Locale.ROOT))?.let {
+            value = it
+        }
     }.value
 
     Box(
@@ -66,7 +67,6 @@ private fun Preview() {
         PokemonDetailScreen(
             pokemonName = "Pikachu",
             dominantColor = Color.White,
-            viewModel = viewModel()
         )
     }
 }

@@ -24,9 +24,9 @@ class MainScreenViewModel @Inject constructor(private val repository: PokemonRep
 
     private val _mainScreenUiState = MutableStateFlow(
         MainScreenUiState(
-            onSearchTextChange = this::onSearchTextChange,
-            onEraseSearchText = this::onEraseSearchText,
-            onCalculateDominantColor = this::onCalculateDominantColor
+            onSearchTextChange = ::onSearchTextChange,
+            onEraseSearchText = ::onEraseSearchText,
+            onCalculateDominantColor = ::onCalculateDominantColor
         )
     )
 

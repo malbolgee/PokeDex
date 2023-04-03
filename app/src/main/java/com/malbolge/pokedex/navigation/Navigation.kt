@@ -63,10 +63,11 @@ fun Navigation(
                     ?: Color.White
             }
 
+            val uiState by pokemonDetailViewModel.uiState.collectAsState()
             PokemonDetailScreen(
+                uiState = uiState,
                 pokemonName = pokemonName,
                 dominantColor = dominantColor,
-                viewModel = pokemonDetailViewModel,
                 onBackNavigation = { navController.popBackStack() },
             )
         }
